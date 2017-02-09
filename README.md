@@ -1,11 +1,14 @@
 # timewidget
-HTML5 Time and time span selection widget using canvas
+HTML5 Time and time span selection widget using canvas. See [demo here](http://www.students.tut.fi/~kortesmv/timewidget/).
 
 ## Current status
 - alpha
 - drawing and selecting mechanics
 - outputs into hidden input field
 - selection doesn't work intuitively
+
+Features:
+- scales both to small and big nicely.
 
 Todo:
 - snap to 1, 5, 10, 15, 20 or 30 minutes
@@ -15,7 +18,7 @@ Todo:
 Depencies:
 - jQuery or Zepto
 
-## usage
+## Usage
 
 Use `x-timewidget` -tag in html. This will be filled with the timewidget. You can choose the size by specifying width in css.
 
