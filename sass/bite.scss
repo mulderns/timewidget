@@ -1,0 +1,78 @@
+@import "bite-colors"; // TODO: how do you import
+
+body {
+  background-color: $color-1;
+  color: $color-2;
+  max-width: 600px;
+  margin:0 auto;
+  font-size: 1.5em;
+  font-family:arial;
+}
+
+header {
+  border-bottom:1px solid $color-3;
+  margin-bottom:10px;
+}
+header h1 {
+  margin: 10px;
+}
+
+form.pretty {
+  margin-top:2em;
+  padding:18px;
+
+} form.pretty div{
+  margin-bottom: 5px;
+}
+
+ul.errors, .no {
+  color:#ef5989;
+}
+
+select, input, textarea {
+  /* border: solid 1px #888; */
+  display: block;
+  font: normal inherit;
+  max-width: 100% !important;
+  margin: 0.2em 0 !important;
+  padding: 0.1em 0.2em !important;
+  text-indent: 0 !important;
+  white-space: nowrap;
+  text-overflow:ellipsis;
+  width: 98% !important;
+  outline: none;
+  word-wrap: break-word;
+  word-wrap: break-all;
+  white-space: nowrap;
+  /*ms-box-sizing:content-box;
+  -moz-box-sizing:content-box;
+  -webkit-box-sizing:content-box;*/
+  box-sizing:content-box;
+
+  background-color: transparent;
+  border: 2px solid #ffecbf;
+  color: #ffecbf;
+  font-size: 1em;
+
+  margin: 0.4em;
+
+}
+
+a {
+  color: #B9F4E9;
+
+}
+
+ul.mods {
+  list-style:none;
+  padding:0;
+
+} ul.mods li a {
+  display: block;
+  border: 1px solid #eee;
+  margin:4px;
+  padding:8px;
+  text-decoration: none;
+  color:black;
+
+}

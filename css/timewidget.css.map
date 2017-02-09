@@ -1,0 +1,7 @@
+{
+"version": 3,
+"mappings": "AAAA,YAAa;EACX,MAAM,EAAC,GAAG;EAGV,KAAK,EAAE,GAAG;EACV,QAAQ,EAAE,QAAQ;EAClB,OAAO,EAAE,YAAY;EAOrB,mBAAO;IACL,KAAK,EAAE,IAAI;IACX,MAAM,EAAE,IAAI",
+"sources": ["../sass/timewidget.scss"],
+"names": [],
+"file": "timewidget.css"
+}

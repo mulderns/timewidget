@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <!-- <script data-main="js/time-widget" src="scripts/require.js"></script> -->
+    <link rel="stylesheet" href="css/timewidget.css">
+    <link rel="stylesheet" href="css/bite.css">
+  </head>
+  <body style="padding:4em;">
+
+  <x-timewidget data-name="time2" data-start="00:00" style="width: 3em;"></x-timewidget>
+
+  <x-timewidget data-name="time1" data-start="00:00"></x-timewidget>
+  <x-timewidget data-name="time2" data-start="00:00" style="width: 6em;"></x-timewidget>
+
+  <x-timewidget data-name="time2" data-start="00:00" style="width: 10em;"></x-timewidget>
+
+  <x-timewidget data-name="time2" data-start="00:00" style="width: 20em;"></x-timewidget>
+
+
+  <script src="lib/zepto.min.js" charset="utf-8"></script>
+  <script src="js/time-widget.js" charset="utf-8"></script>
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+  console.debug("ready");
+  timewidget.activate();
+});
+
+
+
+</script>
+
+
+
+
+  </body>
+</html>

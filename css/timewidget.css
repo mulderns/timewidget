@@ -1,0 +1,10 @@
+x-timewidget {
+  margin: 1em;
+  width: 5em;
+  position: relative;
+  display: inline-block; }
+  x-timewidget canvas {
+    width: 100%;
+    height: 100%; }
+
+/*# sourceMappingURL=timewidget.css.map */
