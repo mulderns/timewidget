@@ -5,6 +5,7 @@ HTML5 Time and time span selection widget using canvas
 - alpha
 - drawing and selecting mechanics
 - outputs into hidden input field
+- selection doesn't work intuitively
 
 Todo:
 - snap to 1, 5, 10, 15, 20 or 30 minutes
@@ -25,6 +26,9 @@ Use `x-timewidget` -tag in html. This will be filled with the timewidget. You ca
 Load time-widget.js in the html file and call `timewidget.activate()` to create the widgets.
 
 ````html
+<script src="lib/zepto.min.js"></script>
+<script src="js/time-widget.js"></script>
+
 <script type="text/javascript">
 $(document).ready(function() {
   console.debug("ready");
