@@ -36,3 +36,8 @@ $(document).ready(function() {
 });
 </script>
 ```
+
+Also add the timewidget css for styling.
+```html
+<link rel="stylesheet" href="css/timewidget.css">
+```
