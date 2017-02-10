@@ -42,10 +42,22 @@ Load time-widget.js in the html file and call `timewidget.activate()` to create 
 <script type="text/javascript">
 $(document).ready(function() {
   console.debug("ready");
-  timewidget.activate();
+    timewidget.activate();
 });
 </script>
 ```
+
+### options
+
+Following options may be passed.
+- snap : 1,2,5,10,15,20,30
+- color1, color2, color3 : any css parseable color definition
+
+```javascript
+timewidget.setup({snap:10, color1: "cyan", color2: "orange"});
+
+```
+
 
 Also add the timewidget css for styling.
 ```html
