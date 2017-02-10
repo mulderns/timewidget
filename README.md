@@ -9,11 +9,18 @@ HTML5 Time and time span selection widget using canvas. See [demo here](http://w
 
 Features:
 - scales both to small and big nicely.
+- snap to 1, 5, 10, 15, 20 or 30 minutes
+- optimize drawing
+- colors and snap in options
 
 Todo:
-- snap to 1, 5, 10, 15, 20 or 30 minutes
+- output both beginning and end
 - multiple timespans
-- colors from css
+(- colors from css)
+- make snap widget specific
+- fix sector shading
+- draw guides for snap
+- 24h range for selection
 
 Depencies:
 - jQuery or Zepto

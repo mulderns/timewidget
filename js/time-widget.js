@@ -14,8 +14,16 @@
   timewidget.pubme = function(){ alert("yeah!"); };
 **/
 
+  var _options = {
+    snap: 30,
+    color1: "cyan",
+    color2: "orange",
+    color3: "gray"
+  };
+
   var ctx;
   var widgets = {};
+  var widget_cache;
 
   function createWidget() {
     var that = {
@@ -23,7 +31,9 @@
       geom: geom(),
       angle: 0,
       ctx: undefined,
-      down: false
+      down: false,
+      cache: undefined
+
     };
 
     return that;
@@ -41,9 +51,28 @@
     return that;
   }
 
+  var minuteAngle = Math.PI/(6*60);
+
+  function getClosestSnap(snap, deg) {
+    if(deg < 0){
+      deg += Math.PI * 2;
+    }
+    var minutes = Math.round((deg - Math.PI/2 )/ minuteAngle);
+    var remain = minutes % snap;
+    if(remain > Math.ceil(snap/2)){
+      minutes = minutes - remain + snap;
+    } else {
+      minutes = minutes - remain;
+    }
+    return minutes * minuteAngle + Math.PI/2;
+  }
+
   function getAngle(widget, event) {
     // atan2(y2 - y1, x2 - x1);
     var angle = Math.atan2(event.layerY - widget.geom.centery, event.layerX - widget.geom.centerx);
+
+    angle = getClosestSnap(_options.snap, angle);
+
     return angle;
   }
 
@@ -92,6 +121,8 @@
 
     console.debug("w: "+ widget.geom.width + " h:" + widget.geom.height);
 
+    // clear cached background
+    widget.cache = undefined;
 
     drawBackground(widget);
     drawHands(widget);
@@ -114,7 +145,8 @@
   function shadeSector(widget, deg1, deg2) {
     var ctx = widget.ctx;
     var geom = widget.geom;
-    ctx.fillStyle = "rgba(200,200,200,0.5)";
+    ctx.fillStyle = _options.color3;
+    //ctx.fillStyle = "rgba(200,200,200,0.5)";
     ctx.beginPath();
     ctx.arc(
       geom.centerx,
@@ -127,11 +159,11 @@
   }
 
   function drawHands(widget) {
-    drawHandle(widget, widget.angle1);
     if(widget.angle2 !== -1){
-      drawHandle(widget, widget.angle2);
       shadeSector(widget, widget.angle1, widget.angle2);
+      drawHandle(widget, widget.angle2);
     }
+    drawHandle(widget, widget.angle1);
   }
 
   // draw handle
@@ -143,6 +175,8 @@
 
     var handle_x1 = Math.cos(angle);
     var handle_y1 = Math.sin(angle);
+
+    ctx.strokeStyle = _options.color2;
 
     // hand
     ctx.beginPath();
@@ -167,6 +201,13 @@
     var ctx = widget.ctx;
     var geom = widget.geom;
 
+    if(widget.cache){
+      //console.debug("wc",widget,":",widget.cache);
+      ctx.putImageData(widget.cache, 0, 0);
+      //console.debug("using cached background");
+      return;
+    }
+
 /*
     // frame
     ctx.lineWidth=1;
@@ -186,20 +227,20 @@
 */
 
     // inner circle
-    ctx.strokeStyle = "cyan";
+    ctx.strokeStyle = _options.color1;
     ctx.lineWidth = geom.line_normal;
     ctx.beginPath();
     ctx.arc(geom.centerx, geom.centery, geom.inner_radius, 0, Math.PI * 2);
     ctx.stroke();
 
     // clock center
-    ctx.fillStyle = "darkcyan";
+    ctx.fillStyle = "dark" + _options.color1;
     ctx.beginPath();
     ctx.arc(geom.centerx, geom.centery, Math.max(1, geom.inner_radius*0.05), 0, Math.PI * 2);
     ctx.fill();
 
     // hours
-    ctx.strokeStyle = "cyan";
+    ctx.strokeStyle = _options.color1;
     ctx.lineCap="round";
 
     var quart = 0;
@@ -231,16 +272,18 @@
     ctx.lineCap="butt";
 
     // outer ring dots
-    ctx.fillStyle= "darkcyan";
+    ctx.fillStyle= "dark" + _options.color1;
     for(deg = 0; deg < Math.PI * 2; deg = deg + Math.PI * 2 / 12) {
       var handle_radius = Math.max(1, geom.radius * 0.12);
-      var x1 = geom.centerx + Math.cos(deg) * (geom.radius - handle_radius*0.5);
-      var y1 = geom.centery + Math.sin(deg) * (geom.radius - handle_radius*0.5);
+      var rx1 = geom.centerx + Math.cos(deg) * (geom.radius - handle_radius*0.5);
+      var ry1 = geom.centery + Math.sin(deg) * (geom.radius - handle_radius*0.5);
       ctx.beginPath();
-      ctx.arc(x1,y1,geom.inner_radius*0.03,0,Math.PI*2);
+      ctx.arc(rx1,ry1,geom.inner_radius*0.03,0,Math.PI*2);
       ctx.fill();
     }
 
+    // store to cache
+    widget.cache = ctx.getImageData(0,0, geom.width, geom.height);
   }
 
   timewidget.activate = function() {
@@ -251,29 +294,41 @@
     });
   };
 
-  function DEBUG(array) {
-    var text = "";
-    for (var i = 0; i < array.length; i++) {
-      if(typeof(array[i]) === "string"){
-        text += array[i]+" ";
-      }else{
-        text += "["+array[i]+"] ";
+  timewidget.setup = function(options){
+    for (var opt in options) {
+      if (options.hasOwnProperty(opt) && _options.hasOwnProperty(opt)) {
+        _options[opt] = options[opt];
+
       }
     }
-    console.debug(text);
-  }
+    console.debug(_options);
+  };
+
+
+  //var hourangle = Math.PI / 6;
 
   function getTime(angle) {
-    angle = angle + Math.PI / 2;
+    //
     if(angle < 0){
-      angle = Math.PI*2 + angle;
+      angle += Math.PI*2;
     }
+    angle = angle + Math.PI / 2;
 
-    var hourangle = Math.PI * 2.0 / 12.0;
+    var minutes = Math.round(angle / minuteAngle);
+    var minute = minutes % 60;
+    var hour = (minutes - minute)/60;
+
+
+
+    // TODO : fix to get accurate
+
+/*
     var hour = Math.floor(angle/hourangle);
-    var minute = Math.floor((angle - hourangle*hour*1.0) * 114.0);
-    DEBUG([angle,hourangle, ':', hour, minute, angle-hourangle*hour, ]);
-
+    var minute = Math.floor((angle - hourangle*hour*1.0) * 120.0);
+    var minutes = Math.round(angle / minuteAngle);
+    console.debug(minutes);
+    console.debug(angle, '/', hourangle, '->', hour, ':', minute, angle-hourangle*hour);
+*/
     hour = (hour < 10 ? "0" + hour : hour);
     minute = (minute < 10 ? "0" + minute : minute);
 
